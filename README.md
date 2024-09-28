@@ -31,9 +31,9 @@ npm install titlecase-french
 You just need to require the package and call the `convert('mon texte de démonstration')` function.
 
 ```js
-var titleCaseFrench = require('titlecase-french');
+import titleCaseFrench from "titlecase-french";
 
-var myText = titleCaseFrench.convert('mon texte de démonstration');
+const myText = titleCaseFrench('mon texte de démonstration');
 console.log(myText); // => Mon Texte de Démonstration
 ```
 
@@ -56,15 +56,16 @@ Where `words` is a list of words separated by Commas.
 In the first example the 'démonstration' word is added to the list and won't be capitalized. In the second example both words 'démonstration' and 'texte' won't be capitalized.
 
 ```js
-var titleCaseFrench = require('titlecase-french');
-titleCaseFrench.addLowerCaseWords('démonstration');
+import titleCaseFrench from "titlecase-french";
+import titleCaseFrench, { addLowerCaseWords } from "../index.js";
+addLowerCaseWords('démonstration');
 
-var myText = titleCaseFrench.convert('mon texte de démonstration');
+const myText = titleCaseFrench('mon texte de démonstration');
 console.log(myText); // => Mon Texte de démonstration
 
-titleCaseFrench.addLowerCaseWords('démonstration,texte');
+addLowerCaseWords('démonstration,texte');
 
-var myText = titleCaseFrench.convert('mon texte de démonstration');
+const myText = titleCaseFrench('mon texte de démonstration');
 console.log(myText); // => Mon texte de démonstration
 ```
 

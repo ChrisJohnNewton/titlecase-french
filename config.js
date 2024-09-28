@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   capitalizedSpecials: [
     { input: 'À', output: 'A'},
     { input: 'Â', output: 'A'},

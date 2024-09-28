@@ -1,10 +1,11 @@
 'use strict';
 
-var config = require('./config');
+// Importing config as an ESM module
+import config from './config.js';
 
 function replaceCapitalizedSpecials(text) {
   if (text) {
-    config.capitalizedSpecials.forEach(function(capitalizedSpecial){
+    config.capitalizedSpecials.forEach(function (capitalizedSpecial) {
       if (!~config.removeCapitalizedSpecials.indexOf(capitalizedSpecial.input)) {
         text = text.replace(new RegExp(capitalizedSpecial.input, 'g'), capitalizedSpecial.output);
       }
@@ -14,7 +15,7 @@ function replaceCapitalizedSpecials(text) {
 }
 
 function isLowerCaseWord(text) {
-  return config.lowerCaseWordList.split(',').some(function(word) {
+  return config.lowerCaseWordList.split(',').some(function (word) {
     if (text.toLowerCase() === word) {
       return word;
     }
@@ -34,11 +35,7 @@ function capitalizeFirstIfNeeded(text) {
 
 function hasQuote(text) {
   var txtWithQuote = text.split('\'');
-  if (txtWithQuote.length === 2) {
-    return true;
-  } else {
-    return false;
-  }
+  return txtWithQuote.length === 2;
 }
 
 function capitalizeWithQuote(text) {
@@ -68,7 +65,7 @@ function capitalizeWithQuote(text) {
 
 function capitalizeEachWord(text) {
   if (text) {
-    text = text.split(' ').map(function(txt, index) {
+    text = text.split(' ').map(function (txt, index) {
       var isComposedWord = false;
 
       // reset the word with lowercase
@@ -81,20 +78,20 @@ function capitalizeEachWord(text) {
       }
 
       // look for -
-      var txtWithDash = txt.split('\-');
+      var txtWithDash = txt.split('-');
       if (txtWithDash.length === 2) {
-        return capitalizeFirst(txtWithDash[0]) + '\-' + capitalizeFirstIfNeeded(txtWithDash[1]);
+        return capitalizeFirst(txtWithDash[0]) + '-' + capitalizeFirstIfNeeded(txtWithDash[1]);
       }
 
       // look for .
       var txtWithDot = txt.split('.');
       if (txtWithDot.length > 1) {
-        return txtWithDot.map(function(letter) {
+        return txtWithDot.map(function (letter) {
           return capitalizeFirst(letter);
         }).join('.');
       }
 
-      // look for know words to replace if it is not the first word of the sentence
+      // look for known words to replace if it is not the first word of the sentence
       if (index === 0) {
         return capitalizeFirst(txt);
       } else {
@@ -111,29 +108,31 @@ function capitalizeEachWord(text) {
   return text;
 }
 
-module.exports.convert = function (text) {
+// Exporting convert as default export
+export default function convert(text) {
   return replaceCapitalizedSpecials(capitalizeEachWord(text));
-};
+}
 
-module.exports.addLowerCaseWords = function (words) {
-  config.lowerCaseWordList = config.lowerCaseWordList + ',' + words.split(',').map(function(word){
+// Named exports for other functions
+export function addLowerCaseWords(words) {
+  config.lowerCaseWordList = config.lowerCaseWordList + ',' + words.split(',').map(function (word) {
     return word.trim();
   }).join(',');
-};
+}
 
-module.exports.removeLowerCaseWords = function (words) {
-  var wordsToRemove = words.split(',').map(function(word) {
+export function removeLowerCaseWords(words) {
+  var wordsToRemove = words.split(',').map(function (word) {
     return word.trim();
   });
-  config.lowerCaseWordList = config.lowerCaseWordList.split(',').filter(function(word) {
+  config.lowerCaseWordList = config.lowerCaseWordList.split(',').filter(function (word) {
     if (!~wordsToRemove.indexOf(word)) {
       return true;
     }
   }).join(',');
-};
+}
 
-module.exports.keepCapitalizedSpecials = function(letters) {
-  config.removeCapitalizedSpecials = letters.split(',').map(function(letter) {
+export function keepCapitalizedSpecials(letters) {
+  config.removeCapitalizedSpecials = letters.split(',').map(function (letter) {
     return letter.trim();
   });
-};
+}
